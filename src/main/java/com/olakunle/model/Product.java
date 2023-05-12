@@ -15,9 +15,8 @@ import java.util.UUID;
 public class Product {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID id = UUID.randomUUID();
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "name")
     private String productName;
     private Double price;

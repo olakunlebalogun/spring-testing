@@ -14,4 +14,6 @@ public interface ProductService {
 
     ProductResponse addProduct(ProductRequest request);
 
+    ProductResponse getSingleProduct(String id);
+
 }

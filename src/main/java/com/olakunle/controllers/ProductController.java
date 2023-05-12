@@ -43,4 +43,11 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.productUpdate(productId, request));
     }
 
+    @GetMapping ("/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ProductResponse> getOneProduct (@PathVariable String productId) {
+        return ResponseEntity.ok().body(productService.getSingleProduct(productId));
+    }
+
+
 }

@@ -32,21 +32,37 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String deleteProduct(String productId) {
-        UUID prodId = UUID.fromString(productId);
+
 //        Optional<Product> product = Optional.ofNullable(productRepository.findById(productId).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId))));
-        Product product = productRepository.findById(String.valueOf(prodId)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)));
+        Product product = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)));
         productRepository.delete(product);
         return String.format("Product with ID %s has been successfully deleted", productId);
     }
 
     @Override
     public ProductResponse productUpdate(String productId, ProductRequest request) {
-       return Optional.ofNullable(productRepository.findById(productId).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)))).stream().map(i -> mapToProduct(request, i)).findFirst().map(MapperClass::mapToProductResponse).stream().findFirst().get();
+//       return Optional.ofNullable(productRepository.findById(productId).orElseThrow(() -> new ProductNotFound(String
+//                       .format("Product with ID %s not found", productId))))
+//                       .stream().map(i -> mapToProduct(request, i)).findFirst()
+//                       .isPresent()
+//               map(MapperClass::mapToProductResponse).stream().findFirst().get();
+        Product fetchedProduct = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)));
+        Product updatedProduct = mapToProduct(request, fetchedProduct);
+        productRepository.save(updatedProduct);
+        return mapToProductResponse(updatedProduct);
     }
 
     @Override
     public ProductResponse addProduct(ProductRequest request) {
         Product product = productRepository.save(mapToProduct(request, new Product()));
         return mapToProductResponse(product);
+    }
+
+    @Override
+    public ProductResponse getSingleProduct(String id) {
+        return Optional.of(productRepository
+                .findById(Long.valueOf(id)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", id))))
+                .stream().map(MapperClass::mapToProductResponse)
+                .findFirst().get();
     }
 }
