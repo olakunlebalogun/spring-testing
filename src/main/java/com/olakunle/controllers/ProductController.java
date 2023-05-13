@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
@@ -33,13 +34,13 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> deleteProduct(@PathVariable String productId){
+    public ResponseEntity<String> deleteProduct(@PathVariable UUID productId){
         return ResponseEntity.ok(productService.deleteProduct(productId));
     }
 
     @PutMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProductResponse> updateProduct (@PathVariable String productId, @RequestBody ProductRequest request){
+    public ResponseEntity<ProductResponse> updateProduct (@PathVariable UUID productId, @RequestBody ProductRequest request){
         return ResponseEntity.ok().body(productService.productUpdate(productId, request));
     }
 

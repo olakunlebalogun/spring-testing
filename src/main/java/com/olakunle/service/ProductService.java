@@ -4,13 +4,14 @@ import com.olakunle.dto.request.ProductRequest;
 import com.olakunle.dto.response.ProductResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductService {
     List<ProductResponse> listAllProducts();
 
-    String deleteProduct(String productId);
+    String deleteProduct(UUID productId);
 
-    ProductResponse productUpdate(String productId, ProductRequest request);
+    ProductResponse productUpdate(UUID productId, ProductRequest request);
 
     ProductResponse addProduct(ProductRequest request);
 

@@ -31,16 +31,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String deleteProduct(String productId) {
-        UUID prodId = UUID.fromString(productId);
+    public String deleteProduct(UUID productId) {
+
 //        Optional<Product> product = Optional.ofNullable(productRepository.findById(productId).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId))));
-        Product product = productRepository.findById(String.valueOf(prodId)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)));
         productRepository.delete(product);
         return String.format("Product with ID %s has been successfully deleted", productId);
     }
 
     @Override
-    public ProductResponse productUpdate(String productId, ProductRequest request) {
+    public ProductResponse productUpdate(UUID productId, ProductRequest request) {
        return Optional.ofNullable(productRepository.findById(productId).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)))).stream().map(i -> mapToProduct(request, i)).findFirst().map(MapperClass::mapToProductResponse).stream().findFirst().get();
     }
 
