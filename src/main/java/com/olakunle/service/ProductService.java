@@ -1,7 +1,11 @@
 package com.olakunle.service;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import com.olakunle.dto.request.ProductRequest;
 import com.olakunle.dto.response.ProductResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -15,5 +19,5 @@ public interface ProductService {
     ProductResponse addProduct(ProductRequest request);
 
     ProductResponse getSingleProduct(String id);
-
+    ResponseEntity<ProductResponse> updateCustomer(String id,JsonPatch patch);
 }

@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  unit-mysql-db:
+    image: mysql:8.0.32
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: "olakunle"
+      MYSQL_PASSWORD: "elnukalo247"
+      MYSQL_DATABASE: "unit_test_db"
+    volumes:
+      - ./data.sql:/var/lib/mysql
+
+    networks:
+      backend:
+        aliases:
+          - "database"
+
+  unit_integrated_service:
+    image: olakunle247balo/licensing-service:0.0.2-SNAPSHOT # Needs to chane
+    environment:
+      DATABASESERVER_PORT: "3306"
+    depends_on:
+      unit-mysql-db:
+        condition: service_healthy
+    ports:
+      - "50000:50000"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

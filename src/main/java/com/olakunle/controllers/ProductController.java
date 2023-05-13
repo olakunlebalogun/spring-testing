@@ -1,6 +1,7 @@
 package com.olakunle.controllers;
 
 
+import com.github.fge.jsonpatch.JsonPatch;
 import com.olakunle.dto.request.ProductRequest;
 import com.olakunle.dto.response.ProductResponse;
 import com.olakunle.service.ProductService;
@@ -49,5 +50,9 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.getSingleProduct(productId));
     }
 
+    @PatchMapping(path = "/{productId}", consumes = "application/json-patch+json")
+    public ResponseEntity<ProductResponse> updateCustomer(@PathVariable String productId, @RequestBody JsonPatch patch) {
+        return productService.updateCustomer(productId, patch);
+    }
 
 }

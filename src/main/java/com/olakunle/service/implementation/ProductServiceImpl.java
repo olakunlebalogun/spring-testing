@@ -1,5 +1,8 @@
 package com.olakunle.service.implementation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import com.olakunle.dto.request.ProductRequest;
 import com.olakunle.dto.response.ProductResponse;
 import com.olakunle.exception.ProductNotFound;
@@ -8,16 +11,19 @@ import com.olakunle.repository.ProductRepository;
 import com.olakunle.service.ProductService;
 import com.olakunle.utils.MapperClass;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 import java.util.stream.Collectors;
 
-import static com.olakunle.utils.MapperClass.mapToProduct;
-import static com.olakunle.utils.MapperClass.mapToProductResponse;
+import static com.olakunle.utils.MapperClass.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +70,19 @@ public class ProductServiceImpl implements ProductService {
                 .findById(Long.valueOf(id)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", id))))
                 .stream().map(MapperClass::mapToProductResponse)
                 .findFirst().get();
+    }
+
+    @Override
+    public ResponseEntity<ProductResponse> updateCustomer(String id, JsonPatch patch) {
+        try {
+            Product product = productRepository.findById(Long.valueOf(id)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", id)));
+            Product patchedProduct = applyPatchToProduct(patch, product);
+            productRepository.save(patchedProduct);
+            return ResponseEntity.ok(mapToProductResponse(patchedProduct));
+        } catch (JsonPatchException | JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (ProductNotFound e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
