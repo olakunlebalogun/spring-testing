@@ -15,32 +15,13 @@ import org.springframework.context.annotation.Bean;
 
 @Slf4j
 @SpringBootApplication
-public class UnitIntegrationTestApplication implements  CommandLineRunner, ApplicationRunner {
+public class UnitIntegrationTestApplication  {
 
     public static void main(String[] args) {
         SpringApplication.run(UnitIntegrationTestApplication.class, args);
     }
 
 
-    @Override
-    public void run(String... args) throws Exception {
-
-        Product one = new Product();
-        one.setDescription("tall large bed");
-        one.setProductName("Mouka foam");
-        one.setPrice(20000.0);
-
-        log.debug(one.toString());
-    }
 
 
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        Product one = new Product();
-        one.setDescription("50 inches black standing fan");
-        one.setProductName("OX Standing fan");
-        one.setPrice(8000.0);
-
-        log.debug(one.toString());
-    }
 }

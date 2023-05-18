@@ -4,7 +4,7 @@ package com.olakunle.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+
 
 @Entity
 @AllArgsConstructor
@@ -12,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Table(name = "product")
 public class Product {
 
     @Id
