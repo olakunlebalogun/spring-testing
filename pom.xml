@@ -120,9 +120,7 @@
         <finalName>unit-integration-test</finalName>
     </build>
     <scm>
-        <connection>scm:git:https://github.com/olakunlebalogun/spring-testing.git</connection>
         <developerConnection>scm:git:https://github.com/olakunlebalogun/spring-testing.git</developerConnection>
-        <url>https://github.com/olakunlebalogun/spring-testing</url>
     </scm>
 
 
