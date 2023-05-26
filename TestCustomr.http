@@ -1,0 +1,37 @@
+### POST to customer endpoint
+POST http://localhost:50000/customers
+Content-Type: application/json
+
+{
+  "email": "olakunlebalogun247",
+  "firstName": "Olakunle",
+  "lastName": "Balogun",
+  "password": "baloski"
+}
+
+
+
+### GET All Customer
+GET http://localhost:50000/customers
+
+
+### GET Single Customer
+GET http://localhost:50000/customers/1
+
+### UPDATE Customer
+PUT http://localhost:50000/customers/1
+Content-Type: application/json
+
+{
+  "email": "kunlebalo247@gmail.com",
+  "firstName": "Olakunle",
+  "lastName": "Balogun",
+  "password": "balochopi"
+}
+
+
+### DELETE Single Customer
+DELETE https://localhost:/customers/1
+
+
+

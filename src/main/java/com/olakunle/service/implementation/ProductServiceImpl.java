@@ -5,7 +5,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.olakunle.dto.request.ProductRequest;
 import com.olakunle.dto.response.ProductResponse;
-import com.olakunle.exception.ProductNotFound;
+import com.olakunle.exception.ProductNotFoundException;
 import com.olakunle.model.Product;
 import com.olakunle.repository.ProductRepository;
 import com.olakunle.service.ProductService;
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     public String deleteProduct(String productId) {
 
 //        Optional<Product> product = Optional.ofNullable(productRepository.findById(productId).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId))));
-        Product product = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)));
+        Product product = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new ProductNotFoundException(String.format("Product with ID %s not found", productId)));
         productRepository.delete(product);
         return String.format("Product with ID %s has been successfully deleted", productId);
     }
@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 //                       .stream().map(i -> mapToProduct(request, i)).findFirst()
 //                       .isPresent()
 //               map(MapperClass::mapToProductResponse).stream().findFirst().get();
-        Product fetchedProduct = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", productId)));
+        Product fetchedProduct = productRepository.findById(Long.valueOf(productId)).orElseThrow(() -> new ProductNotFoundException(String.format("Product with ID %s not found", productId)));
         Product updatedProduct = mapToProduct(request, fetchedProduct);
         productRepository.save(updatedProduct);
         return mapToProductResponse(updatedProduct);
@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getSingleProduct(String id) {
         return Optional.of(productRepository
-                .findById(Long.valueOf(id)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", id))))
+                .findById(Long.valueOf(id)).orElseThrow(() -> new ProductNotFoundException(String.format("Product with ID %s not found", id))))
                 .stream().map(MapperClass::mapToProductResponse)
                 .findFirst().get();
     }
@@ -75,13 +75,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<ProductResponse> updateCustomer(String id, JsonPatch patch) {
         try {
-            Product product = productRepository.findById(Long.valueOf(id)).orElseThrow(() -> new ProductNotFound(String.format("Product with ID %s not found", id)));
+            Product product = productRepository.findById(Long.valueOf(id)).orElseThrow(() -> new ProductNotFoundException(String.format("Product with ID %s not found", id)));
             Product patchedProduct = applyPatchToProduct(patch, product);
             productRepository.save(patchedProduct);
             return ResponseEntity.ok(mapToProductResponse(patchedProduct));
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (ProductNotFound e) {
+        } catch (ProductNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
