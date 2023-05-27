@@ -31,13 +31,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse update(String id, CustomerRequest user) throws CustomerNotFoundException {
-        if (!customerRepository.existsByEmail(user.getEmail()) || !customerRepository.existsById(Long.valueOf(id))) {
-//            customerRepository.save(modelMapper.map(user, Customer.class));
-            throw new CustomerNotFoundException(String.format("Customer with Email %s does not exist", user.getEmail()));
+        Long customerId = Long.valueOf(id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+
+        if (optionalCustomer.isPresent()) {
+            Customer customer = optionalCustomer.get();
+            customer.setEmail(user.getEmail());
+            customer.setFirstName(user.getFirstName());
+            customer.setLastName(user.getLastName());
+            customer.setPassword(user.getPassword());
+            Customer savedCustomer = customerRepository.save(customer);
+            return modelMapper.map(savedCustomer, CustomerResponse.class);
         }
-        Customer savedCustomer = customerRepository.save(modelMapper.map(user, Customer.class));
-        return modelMapper.map(savedCustomer, CustomerResponse.class);
+
+        throw new CustomerNotFoundException(String.format("Customer with ID %s does not exist", id));
     }
+
 
     @Override
     public CustomerResponse get(Long id) throws CustomerNotFoundException {

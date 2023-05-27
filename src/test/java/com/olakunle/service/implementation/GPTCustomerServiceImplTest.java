@@ -41,8 +41,9 @@ public class GPTCustomerServiceImplTest {
 
     private CustomerRepository customerRepository;
     private ModelMapper modelMapper;
-
     private CustomerServiceImpl customerServiceImpl;
+
+
     @BeforeEach
     void setUp() {
         customerRepository = Mockito.mock(CustomerRepository.class);
