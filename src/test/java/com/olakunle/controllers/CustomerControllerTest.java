@@ -107,7 +107,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void test_AddCustomer_Okay () throws Exception {
+    public void testAddCustomerOkay () throws Exception {
 
         // Act
         when(customerService.add(request)).thenReturn(response);
@@ -120,8 +120,9 @@ public class CustomerControllerTest {
                 .andExpect(jsonPath("$.email", is(email)))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(header().string("Location", "/customers/1"))
-//                .andReturn();
-                .andDo(print());
+                .andExpect(header().string("Content-Type", "application/json"))
+                .andDo(print())
+                .andReturn();
     }
 
     @Test
